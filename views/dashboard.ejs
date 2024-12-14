@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    /* Body and Background */
+    body {
+      background: linear-gradient(to right, #1f4037, #99f2c8);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 900px;
+      margin-top: 50px;
+    }
+
+    /* Heading and Cards */
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #fff;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      font-weight: bold;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .card {
+      border-radius: 12px;
+      background-color: rgba(0, 0, 0, 0.7);
+      box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-header {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .form-control {
+      background-color: #2b2b2b;
+      border: 2px solid #3e3e3e;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      transition: 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.8);
+    }
+
+    .btn-primary {
+      background-color: #4CAF50;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: #45a049;
+    }
+
+    .expense-table th, .expense-table td {
+      text-align: center;
+      padding: 12px;
+      vertical-align: middle;
+    }
+
+    .expense-table {
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+      margin-top: 30px;
+      border: 1px solid #2b2b2b;
+    }
+
+    .expense-table th {
+      background-color: #4CAF50;
+    }
+
+    .expense-table tbody tr {
+      transition: background-color 0.3s ease;
+    }
+
+    .expense-table tbody tr:hover {
+      background-color: #4CAF50;
+    }
+
+    .expense-actions a {
+      margin: 0 5px;
+      padding: 6px 12px;
+      color: #fff;
+      border-radius: 5px;
+      transition: 0.3s ease;
+    }
+
+    .expense-actions a.edit {
+      background-color: #ffc107;
+    }
+
+    .expense-actions a.delete {
+      background-color: #dc3545;
+    }
+
+    .expense-actions a:hover {
+      opacity: 0.8;
+    }
+
+    /* Remaining Amount Styling */
+    #remainingAmount {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #4CAF50;
+      text-align: center;
+      margin-top: 30px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Glow effect */
+    .btn-primary, .expense-actions a.edit, .expense-actions a.delete {
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.7);
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+      .container {
+        margin-top: 20px;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Welcome to the Expense Tracker</h1>
+
+    <!-- Logout Button -->
+    <div class="d-flex justify-content-end">
+      <a href="/auth/logout" class="btn btn-danger">Logout</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Your Financial Overview</h2>
+      </div>
+      <div class="card-body">
+        <form id="salaryForm">
+          <label for="salary">Enter Your Salary: </label>
+          <input type="number" id="salary" class="form-control" value="<%= salary %>" onchange="calculateRemaining()" required>
+        </form>
+
+        <form id="expenseForm">
+          <h3>Add Expense</h3>
+          <label for="description">Description: </label>
+          <input type="text" id="description" class="form-control" required><br>
+
+          <label for="amount">Amount: </label>
+          <input type="number" name="amount" class="form-control" required><br>
+
+          <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+
+        <h3>Your Expenses</h3>
+        <table id="expenseTable" class="table table-striped expense-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Expense rows will be appended here -->
+          </tbody>
+        </table>
+
+        <p id="remainingAmount"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script>
+    // Initialize the page with data from localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+      const salary = parseFloat(localStorage.getItem('salary')) || 0;
+      const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+      document.getElementById('salary').value = salary;
+
+      expenses.forEach(expense => {
+        addExpenseToTable(expense.description, expense.amount);
+      });
+
+      calculateRemaining();
+    });
+
+    // Add Expense function
+    document.getElementById('expenseForm').addEventListener('submit', addExpense);
+
+    function addExpense(event) {
+      event.preventDefault();  // Prevent form submission
+
+      const description = document.getElementById('description').value;
+      const amount = parseFloat(document.querySelector('[name="amount"]').value);
+
+      if (!description || !amount || amount <= 0) {
+        alert('Please enter a valid description and amount.');
+        return;
+      }
+
+      addExpenseToTable(description, amount);
+
+      // Save to localStorage
+      const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+      expenses.push({ description, amount });
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+
+      // Recalculate the remaining amount
+      calculateRemaining();
+
+      // Clear form fields
+      document.getElementById('description').value = '';
+      document.querySelector('[name="amount"]').value = '';
+    }
+
+    // Add expense to table
+    function addExpenseToTable(description, amount) {
+      const expenseTableBody = document.querySelector('tbody');
+      const newRow = document.createElement('tr');
+
+      // Description cell
+      const descriptionCell = document.createElement('td');
+      descriptionCell.textContent = description;
+
+      // Amount cell (editable)
+      const amountCell = document.createElement('td');
+      const amountInput = document.createElement('input');
+      amountInput.type = 'number';
+      amountInput.classList.add('expense-amount');
+      amountInput.value = amount;
+      amountInput.setAttribute('onchange', 'calculateRemaining()');
+      amountCell.appendChild(amountInput);
+
+      // Actions cell
+      const actionsCell = document.createElement('td');
+      actionsCell.innerHTML = `<div class="expense-actions"><a href="#" class="edit" onclick="editExpense(event)">Edit</a> <a href="#" class="delete" onclick="deleteExpense(event)">Delete</a></div>`;
+
+      // Append new row
+      newRow.appendChild(descriptionCell);
+      newRow.appendChild(amountCell);
+      newRow.appendChild(actionsCell);
+
+      expenseTableBody.appendChild(newRow);
+    }
+
+    // Delete Expense function
+    function deleteExpense(event) {
+      const row = event.target.closest('tr');
+      row.remove();
+
+      // Update localStorage
+      updateExpensesInLocalStorage();
+
+      // Recalculate remaining amount
+      calculateRemaining();
+    }
+
+    // Edit Expense function
+    function editExpense(event) {
+      const row = event.target.closest('tr');
+      const amountInput = row.querySelector('input');
+      const newAmount = prompt('Edit amount:', amountInput.value);
+
+      if (newAmount && !isNaN(newAmount)) {
+        amountInput.value = newAmount;
+        updateExpensesInLocalStorage();
+        calculateRemaining();
+      }
+    }
+
+    // Update expenses in localStorage after edit or delete
+    function updateExpensesInLocalStorage() {
+      const expenses = [];
+      const rows = document.querySelectorAll('tbody tr');
+      
+      rows.forEach(row => {
+        const description = row.querySelector('td').textContent;
+        const amount = parseFloat(row.querySelector('input').value);
+        expenses.push({ description, amount });
+      });
+
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+    }
+
+    // Calculate the remaining amount
+    function calculateRemaining() {
+      const salary = parseFloat(document.getElementById('salary').value) || 0;
+      const expenses = Array.from(document.getElementsByClassName('expense-amount'))
+        .map(input => parseFloat(input.value) || 0);  // Get all expense values
+
+      const totalExpenses = expenses.reduce((acc, expense) => acc + expense, 0);  // Sum up expenses
+      const remainingAmount = salary - totalExpenses;  // Subtract total expenses from salary
+
+      document.getElementById('remainingAmount').textContent = `Remaining Amount: ₹${remainingAmount.toFixed(2)}`;
+
+      // Save salary in localStorage
+      localStorage.setItem('salary', salary);
+    }
+  </script>
+</body>
+</html>

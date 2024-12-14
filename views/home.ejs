@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Custom Grid Layout */
+    .masonry {
+      column-count: 4;
+      column-gap: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+      .masonry {
+        column-count: 3;
+      }
+    }
+    @media (max-width: 768px) {
+      .masonry {
+        column-count: 2;
+      }
+    }
+    @media (max-width: 480px) {
+      .masonry {
+        column-count: 1;
+      }
+    }
+
+    .card {
+      background-color: rgba(30, 30, 30, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      border-radius: 15px;
+    }
+
+    /* Login Button Styling */
+    .login-btn {
+      background: linear-gradient(135deg, #ff6b6b, #f06595);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-block;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .login-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
+    }
+
+    /* Styling for the footer */
+    .footer {
+      text-align: center;
+      font-size: 1rem;
+      color: #c0c0c0;
+      margin-top: 50px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+  <!-- Header -->
+  <header class="py-6 text-center text-3xl font-bold">
+    <h1>Welcome to Expense Tracker</h1>
+    <p class="text-xl mt-4">Manage your expenses like never before</p>
+  </header>
+
+  <!-- Main Content - Piniest-style Grid -->
+  <main class="masonry container mx-auto px-4 py-8">
+    <!-- Card 1 -->
+    <div class="card">
+      <img src="https://images.pexels.com/photos/267614/pexels-photo-267614.jpeg?cs=srgb&dl=pexels-pixabay-267614.jpg&fm=jpg" alt="Track Expenses" class="w-full h-56 object-cover rounded-t-lg">
+      <div class="p-4">
+        <h3 class="text-2xl font-semibold">Track Expenses</h3>
+        <p class="mt-2">Track and manage your monthly expenses with ease and stay on top of your budget.</p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <img src="https://images.pexels.com/photos/259951/pexels-photo-259951.jpeg?cs=srgb&dl=pexels-pixabay-259951.jpg&fm=jpg" alt="Secure Login" class="w-full h-56 object-cover rounded-t-lg">
+      <div class="p-4">
+        <h3 class="text-2xl font-semibold">Secure Login</h3>
+        <p class="mt-2">Our system uses the latest security measures to keep your information safe and secure.</p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <img src="https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg?cs=srgb&dl=pexels-pixabay-753626.jpg&fm=jpg" alt="Easy Budgeting" class="w-full h-56 object-cover rounded-t-lg">
+      <div class="p-4">
+        <h3 class="text-2xl font-semibold">Easy Budgeting</h3>
+        <p class="mt-2">Set your budget and track expenses in real-time to manage your finances effectively.</p>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card">
+      <img src="https://images.pexels.com/photos/1407359/pexels-photo-1407359.jpeg?cs=srgb&dl=pexels-pixabay-1407359.jpg&fm=jpg" alt="Expense Categories" class="w-full h-56 object-cover rounded-t-lg">
+      <div class="p-4">
+        <h3 class="text-2xl font-semibold">Expense Categories</h3>
+        <p class="mt-2">Categorize your expenses for a better overview and easily analyze your spending patterns.</p>
+      </div>
+    </div>
+
+    <!-- Add more cards as needed -->
+  </main>
+
+  <!-- Login Button -->
+  <div class="text-center">
+    <a href="/auth/login" class="login-btn">
+      Login <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>&copy; 2024 Expense Tracker. All Rights Reserved.</p>
+  </div>
+
+</body>
+</html>
